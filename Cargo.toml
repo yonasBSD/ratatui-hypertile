@@ -1,0 +1,29 @@
+[workspace]
+members = ["extras"]
+resolver = "2"
+
+[package]
+name = "ratatui-hypertile"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Tiling layout engine for Ratatui"
+license = "MIT"
+repository = "https://github.com/nikolic-milos/ratatui-hypertile"
+documentation = "https://docs.rs/ratatui-hypertile"
+readme = "README.md"
+keywords = ["tiling", "layout", "ratatui", "tui", "panes"]
+categories = ["command-line-interface"]
+
+[dependencies]
+ratatui = { version = "0.30", default-features = false, features = ["all-widgets", "crossterm"] }
+serde = { version = "1.0", features = ["derive"], optional = true }
+
+[features]
+default = []
+serde = ["dep:serde"]
+
+[dev-dependencies]
+crossterm = "0.29"
+ratatui-hypertile-extras = { version = "0.1.0", path = "extras", features = ["crossterm"] }
+serde_json = "1.0"
