@@ -211,8 +211,8 @@ fn run(terminal: &mut ratatui::DefaultTerminal, runtime: &mut HypertileRuntime) 
 
     loop {
         terminal.draw(|frame| {
-            let [header, body] = Layout::vertical([Constraint::Length(3), Constraint::Min(0)])
-                .areas(frame.area());
+            let [header, body] =
+                Layout::vertical([Constraint::Length(3), Constraint::Min(0)]).areas(frame.area());
 
             let mode = match runtime.mode() {
                 InputMode::Layout => "layout",

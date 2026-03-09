@@ -125,7 +125,10 @@ fn split(
     if let Ok(id) = layout.split_focused(dir) {
         labels.insert(
             id,
-            (format!("Pane {}", *count + 1), COLORS[*count % COLORS.len()]),
+            (
+                format!("Pane {}", *count + 1),
+                COLORS[*count % COLORS.len()],
+            ),
         );
         *count += 1;
     }

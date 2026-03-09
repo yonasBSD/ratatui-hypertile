@@ -98,7 +98,12 @@ fn split_rect(area: Rect, direction: ratatui::layout::Direction, ratio: f32) -> 
             let second_w = area.width.saturating_sub(first_w);
             (
                 Rect::new(area.x, area.y, first_w, area.height),
-                Rect::new(area.x.saturating_add(first_w), area.y, second_w, area.height),
+                Rect::new(
+                    area.x.saturating_add(first_w),
+                    area.y,
+                    second_w,
+                    area.height,
+                ),
             )
         }
         Direction::Vertical => {
