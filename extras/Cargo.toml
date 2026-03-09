@@ -2,7 +2,7 @@
 name = "ratatui-hypertile-extras"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.86"
 description = "Optional runtime helpers for ratatui-hypertile"
 license = "MIT"
 repository = "https://github.com/nikolic-milos/ratatui-hypertile"
@@ -21,3 +21,7 @@ serde_json = { version = "1.0", optional = true }
 default = ["crossterm"]
 crossterm = ["dep:crossterm"]
 serde = ["dep:serde", "dep:serde_json", "ratatui-hypertile/serde"]
+
+[[example]]
+name = "basic"
+required-features = ["crossterm"]
