@@ -27,6 +27,7 @@ impl SplitPolicy {
     }
 }
 
+/// A pane's id, rectangle, and focus state at one point in time.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct PaneSnapshot {
     pub id: PaneId,

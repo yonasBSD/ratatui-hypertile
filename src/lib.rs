@@ -31,10 +31,12 @@ pub use crate::input::{
 pub use crate::types::{PaneSnapshot, SplitPolicy};
 pub use crate::widget::HypertileWidget;
 
+/// Low-level tree types and state. Use [`Hypertile`] for most work.
 pub mod raw {
     pub use crate::core::{HypertileState, Node, PaneId, StateError, collect_pane_ids};
 }
 
+/// Re-exports every public type for convenience.
 pub mod prelude {
     pub use crate::{
         EventOutcome, Hypertile, HypertileAction, HypertileBuilder, HypertileEvent,

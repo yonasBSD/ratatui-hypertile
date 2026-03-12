@@ -82,6 +82,7 @@ impl HypertileState {
         self.highlight_focus
     }
 
+    /// Skips work if the area and tree have not changed since the last call.
     pub fn compute_layout(&mut self, area: Rect) {
         self.sync_focus_path();
 
@@ -121,6 +122,7 @@ impl HypertileState {
     pub fn panes_geometric_order(&self) -> &[(PaneId, Rect)] {
         &self.sorted_panes
     }
+
     pub fn pane_path(&self, pane_id: PaneId) -> Option<Vec<usize>> {
         find_pane_path(&self.root, pane_id)
     }
@@ -153,6 +155,7 @@ impl HypertileState {
         self.gap
     }
 
+    /// Invalidates the layout cache if the value changed.
     pub fn set_gap(&mut self, gap: u16) {
         if self.gap != gap {
             self.gap = gap;

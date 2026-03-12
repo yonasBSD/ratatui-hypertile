@@ -30,6 +30,7 @@ impl std::fmt::Display for PaneId {
     }
 }
 
+/// BSP tree node. Either a leaf pane or a split with two children.
 #[derive(Debug, Clone)]
 pub enum Node {
     Pane(PaneId),

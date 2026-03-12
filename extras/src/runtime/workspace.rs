@@ -15,6 +15,7 @@ pub struct WorkspaceRuntime {
     builder_factory: Box<dyn Fn() -> HypertileRuntimeBuilder>,
 }
 
+/// Command understood by [`WorkspaceRuntime`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum WorkspaceAction {
     NewTab,

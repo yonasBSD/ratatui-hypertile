@@ -68,7 +68,6 @@ impl HypertileRuntime {
         HypertileRuntimeBuilder::default()
     }
 
-    /// Creates a runtime with the default placeholder root pane.
     pub fn new() -> Self {
         Self::builder().build()
     }
@@ -157,7 +156,6 @@ impl HypertileRuntime {
         Ok(())
     }
 
-    /// Resets to one root pane.
     pub fn reset(&mut self) {
         self.core.reset();
         self.sync_registry_to_core();
@@ -176,7 +174,6 @@ impl HypertileRuntime {
         Ok(pane_id)
     }
 
-    /// Closes the focused pane and unmounts its plugin.
     pub fn close_focused(&mut self) -> Result<PaneId, RuntimeError> {
         let removed_id = self.core.close_focused()?;
         self.registry.remove_plugin_if_exists(removed_id);

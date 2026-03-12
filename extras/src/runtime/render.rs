@@ -11,6 +11,7 @@ use ratatui::{
 };
 use ratatui_hypertile::PaneId;
 
+/// One entry in a [`PaneBar`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PaneBarItem {
     pub pane_id: PaneId,
@@ -18,6 +19,7 @@ pub struct PaneBarItem {
     pub is_focused: bool,
 }
 
+/// Widget that lists all panes with their plugin types.
 #[derive(Debug, Clone)]
 pub struct PaneBar {
     title: String,

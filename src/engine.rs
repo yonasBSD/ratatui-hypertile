@@ -114,6 +114,7 @@ impl Hypertile {
         &mut self.state
     }
 
+    /// Skips work if the area and tree have not changed since the last call.
     pub fn compute_layout(&mut self, area: Rect) {
         self.state.compute_layout(area);
     }
@@ -168,6 +169,8 @@ impl Hypertile {
     pub fn root(&self) -> &Node {
         self.state.root()
     }
+
+    /// Replaces the entire tree. Resets focus to the leftmost leaf.
     pub fn set_root(&mut self, root: Node) -> Result<(), StateError> {
         self.state.set_root(root)
     }
