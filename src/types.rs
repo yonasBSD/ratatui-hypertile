@@ -11,9 +11,12 @@ use ratatui::layout::Rect;
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum SplitPolicy {
+    /// 50/50 split (ratio = 0.5).
     #[default]
     Half,
+    /// Golden-ratio split (ratio = 0.618).
     Golden,
+    /// Custom ratio, clamped to `0.1..=0.9`.
     Fixed(f32),
 }
 

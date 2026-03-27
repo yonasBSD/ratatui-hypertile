@@ -1,6 +1,6 @@
 use ratatui::layout::Direction;
 
-/// Stable pane identifier.
+/// Stable pane identifier, never reused within one `Hypertile` instance.
 ///
 /// ```
 /// use ratatui_hypertile::PaneId;
@@ -36,13 +36,14 @@ pub enum Node {
     Pane(PaneId),
     Split {
         direction: Direction,
+        /// How much space goes to `first` (clamped to `0.1..=0.9`).
         ratio: f32,
         first: Box<Node>,
         second: Box<Node>,
     },
 }
 
-/// Returned when a raw tree mutation or focus operation cannot be applied.
+/// Returned when a tree operation cannot be applied.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum StateError {
     InvalidPath,
@@ -51,6 +52,7 @@ pub enum StateError {
     CannotRemoveRootPane,
     DuplicatePaneId(PaneId),
     UnknownPaneId(PaneId),
+    /// Directional operations need [`compute_layout`](crate::Hypertile::compute_layout) first.
     LayoutUnavailable,
 }
 

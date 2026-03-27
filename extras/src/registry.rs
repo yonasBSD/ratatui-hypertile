@@ -10,7 +10,6 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 pub trait HypertilePlugin {
     fn render(&self, area: Rect, buf: &mut Buffer, is_focused: bool);
 
-    /// Handles an event forwarded by the runtime or registry.
     /// Return [`EventOutcome::Consumed`] to mark it handled.
     fn on_event(&mut self, _event: &HypertileEvent) -> EventOutcome {
         EventOutcome::Ignored
@@ -20,13 +19,11 @@ pub trait HypertilePlugin {
 
     fn on_unmount(&mut self, _ctx: PluginContext) {}
 
-    /// Returns serializable state to include in persisted plugin snapshots.
     #[cfg(feature = "serde")]
     fn save_state(&self) -> Option<serde_json::Value> {
         None
     }
 
-    /// Restores state previously returned by [`save_state`](Self::save_state).
     #[cfg(feature = "serde")]
     fn load_state(&mut self, _state: &serde_json::Value) -> Result<(), String> {
         Ok(())
