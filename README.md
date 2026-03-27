@@ -12,7 +12,7 @@ Cook up delicious terminal interfaces with Hyprland-style tiling for [Ratatui](h
 
 [`ratatui-hypertile-extras`](https://crates.io/crates/ratatui-hypertile-extras) wraps the core into a runtime with plugins, vim keymaps, a command palette, workspace tabs and pane-move animations. Implement `HypertilePlugin` and you're set.
 
-## Quickstart
+## Try it out
 
 From the repo root:
 
@@ -29,7 +29,7 @@ cargo run --example core_only
 `s` `v` split &ensp; `d` close &ensp; `hjkl` focus &ensp; `HJKL` move &ensp; `[` `]` resize
 `p` palette &ensp; `i` plugin input &ensp; `Ctrl+t` new tab &ensp; `Ctrl+w` close tab &ensp; `Ctrl+c` quit
 
-## Wire it up
+## Quickstart
 
 ```toml
 # just the layout engine
