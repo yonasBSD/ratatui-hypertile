@@ -24,9 +24,10 @@ cargo run -p ratatui-hypertile-extras --example basic
 cargo run --example core_only
 ```
 
-**Keys (basic example):**
+**Keys:**
 
 `s` `v` split &ensp; `d` close &ensp; `hjkl` focus &ensp; `HJKL` move &ensp; `[` `]` resize
+
 `p` palette &ensp; `i` plugin input &ensp; `Ctrl+t` new tab &ensp; `Ctrl+w` close tab &ensp; `Ctrl+c` quit
 
 ## Quickstart
