@@ -14,11 +14,11 @@ pub(super) enum RuntimeAction {
 /// Movement key preset for layout mode.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MoveBindings {
-    /// `hjkl` (uppercase or with Shift) to move panes.
+    /// `HJKL` to move panes.
     Vim,
-    /// Shift+Arrow keys to move panes.
+    /// `Shift+Arrow` to move panes.
     ShiftArrows,
-    /// Both vim keys and Shift+Arrow keys.
+    /// Both. Default.
     VimAndShiftArrows,
 }
 

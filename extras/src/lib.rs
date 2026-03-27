@@ -1,8 +1,10 @@
 //! Ready-made runtime on top of [`ratatui_hypertile`].
 //!
 //! Includes a plugin registry, vim-style modal input, a command palette,
-//! workspace tabs, and a crossterm adapter. Ships with specific defaults,
-//! use the core crate directly if you need full control.
+//! workspace tabs, pane-move animations, and a crossterm adapter.
+//!
+//! Use [`HypertileRuntime`] for a single tiling view or [`WorkspaceRuntime`]
+//! for a tabbed workspace.
 //!
 //! ```
 //! use ratatui_hypertile_extras::HypertileRuntime;

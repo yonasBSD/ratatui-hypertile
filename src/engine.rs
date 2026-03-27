@@ -35,13 +35,14 @@ impl Default for HypertileBuilder {
 }
 
 impl HypertileBuilder {
+    /// When disabled, [`PaneSnapshot::is_focused`](crate::PaneSnapshot::is_focused)
+    /// is always `false` so you can draw your own focus indicator.
     pub fn with_focus_highlight(mut self, enabled: bool) -> Self {
         self.highlight_focus = enabled;
         self
     }
 
-    /// Sets the ratio delta used by resize commands.
-    /// Non-finite or non-positive values are ignored.
+    /// Non-finite or non-positive values are ignored. Defaults to 5%.
     pub fn with_resize_step(mut self, step: f32) -> Self {
         if step.is_finite() && step > 0.0 {
             self.resize_step = step;
@@ -54,11 +55,13 @@ impl HypertileBuilder {
         self
     }
 
+    /// Gap between pane borders, in cells.
     pub fn with_gap(mut self, gap: u16) -> Self {
         self.gap = gap;
         self
     }
 
+    /// Starts with a single root pane.
     pub fn build(self) -> Hypertile {
         let mut state = HypertileState::new();
         state.set_focus_highlight(self.highlight_focus);
@@ -72,7 +75,12 @@ impl HypertileBuilder {
     }
 }
 
-/// Main layout state and action entry point.
+/// BSP tiling layout engine.
+///
+/// Send [`HypertileAction`]s through [`apply_action`](Self::apply_action) or
+/// call the split/close/resize/move methods directly. Layout rectangles are
+/// computed lazily via [`compute_layout`](Self::compute_layout) and cached
+/// until the tree or area changes.
 ///
 /// ```
 /// use ratatui::layout::Direction;
@@ -114,12 +122,13 @@ impl Hypertile {
         &mut self.state
     }
 
-    /// Skips if the area and tree are unchanged.
+    /// No-op if the area and tree have not changed. Must be called before
+    /// [`panes`](Self::panes), [`pane_rect`](Self::pane_rect), or directional
+    /// focus/move actions.
     pub fn compute_layout(&mut self, area: Rect) {
         self.state.compute_layout(area);
     }
 
-    /// Sets the ratio delta used by resize commands.
     /// Non-finite or non-positive values are ignored.
     pub fn set_resize_step(&mut self, step: f32) {
         if step.is_finite() && step > 0.0 {
@@ -171,7 +180,7 @@ impl Hypertile {
         self.state.root()
     }
 
-    /// Replaces the entire tree. Resets focus to the leftmost leaf.
+    /// Replaces the tree, normalizes it, validates unique ids, and resets focus.
     pub fn set_root(&mut self, root: Node) -> Result<(), StateError> {
         self.state.set_root(root)
     }
@@ -180,6 +189,7 @@ impl Hypertile {
         self.state.reset();
     }
 
+    /// Visits every node in pre-order.
     pub fn walk_preorder<F>(&self, visit: F)
     where
         F: FnMut(&[usize], &Node),
@@ -187,12 +197,13 @@ impl Hypertile {
         self.state.walk_preorder(visit)
     }
 
+    /// Panes in geometric order. Requires a prior [`compute_layout`](Self::compute_layout).
     #[must_use]
     pub fn panes(&self) -> Vec<PaneSnapshot> {
         self.panes_iter().collect()
     }
 
-    /// Like [`panes`](Self::panes), but without allocating.
+    /// Like [`panes`](Self::panes) but without allocating.
     pub fn panes_iter(&self) -> impl Iterator<Item = PaneSnapshot> + '_ {
         let focused = self.state.focused_pane();
         let highlight = self.state.focus_highlight();
@@ -224,13 +235,13 @@ impl Hypertile {
         self.state.set_focused_ratio(ratio).map(|_| ())
     }
 
-    /// Like [`try_apply_action`](Self::try_apply_action), but returns
-    /// [`EventOutcome::Ignored`] on error.
+    /// Like [`try_apply_action`](Self::try_apply_action) but returns `Ignored` on error.
     pub fn apply_action(&mut self, action: HypertileAction) -> EventOutcome {
         self.try_apply_action(action)
             .unwrap_or(EventOutcome::Ignored)
     }
 
+    /// `Consumed` when state changed, `Ignored` when valid but no effect.
     pub fn try_apply_action(
         &mut self,
         action: HypertileAction,

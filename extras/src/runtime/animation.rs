@@ -4,6 +4,23 @@ use ratatui_hypertile::PaneId;
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
 
+/// Drives the per-pane slide animation for `MoveFocused` actions.
+///
+/// # Lifecycle
+///
+/// 1. **`capture_before`** snapshots each pane's current displayed rect
+///    (interpolated if an animation is already in flight).
+/// 2. The core engine applies the move action, rearranging pane ids.
+/// 3. **`start`** diffs before/after rects and creates transitions for panes
+///    that moved. Reuses the previous `ActiveAnimation`'s HashMap to avoid
+///    re-allocating.
+/// 4. **`display_rects`** is called during render to produce interpolated rects.
+///    Static panes come first, moving panes are appended last (painted on top).
+/// 5. **`next_frame_in`** tells the event loop when to wake for the next frame.
+///
+/// If a new move arrives mid-animation, `capture_before` reads the in-progress
+/// interpolated positions so the new animation starts seamlessly from the
+/// visually displayed state.
 #[derive(Debug, Default)]
 pub(super) struct AnimationState {
     active: Option<ActiveAnimation>,
@@ -25,6 +42,7 @@ impl AnimationState {
         self.last_area
     }
 
+    /// Cancels active animation if the area changed (e.g. terminal resize).
     pub(super) fn remember_area(&mut self, area: Rect) {
         if self.last_area != Some(area) {
             self.active = None;
@@ -32,6 +50,8 @@ impl AnimationState {
         self.last_area = Some(area);
     }
 
+    /// If an animation is running, reads interpolated positions so a chained
+    /// move starts from where panes visually are.
     pub(super) fn capture_before<I>(&mut self, area: Rect, panes: I, now: Instant)
     where
         I: IntoIterator<Item = (PaneId, Rect)>,
@@ -58,6 +78,7 @@ impl AnimationState {
         }
     }
 
+    /// Diffs before/after and starts transitions for panes that moved.
     pub(super) fn start<I>(&mut self, area: Rect, panes: I, now: Instant, config: AnimationConfig)
     where
         I: IntoIterator<Item = (PaneId, Rect)>,
@@ -102,6 +123,7 @@ impl AnimationState {
         active.next_frame_in(now, normalize_frame_interval(config.frame_interval))
     }
 
+    /// Moving panes are appended last so they paint on top.
     pub(super) fn display_rects<I>(
         &mut self,
         area: Rect,
@@ -140,6 +162,7 @@ impl AnimationState {
     }
 }
 
+/// Dropped on area mismatch (e.g. terminal resize).
 #[derive(Debug)]
 struct ActiveAnimation {
     area: Rect,

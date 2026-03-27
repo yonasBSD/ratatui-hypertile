@@ -2,6 +2,8 @@ use ratatui::layout::Direction;
 use std::ops::{BitOr, BitOrAssign};
 
 /// Event delivered to the layout engine or runtime.
+///
+/// The core engine only acts on `Action`. Key and tick are for higher-level code.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum HypertileEvent {
     Key(KeyChord),
@@ -107,13 +109,13 @@ pub enum Towards {
 /// How pane moves are resolved.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum MoveScope {
-    /// Swap with the nearest pane in that direction.
+    /// Swap with the nearest pane in that direction (requires layout).
     Window,
     /// Swap inside the nearest ancestor split on that axis.
     Split,
 }
 
-/// Command understood by [`crate::Hypertile`].
+/// Layout command for [`Hypertile::apply_action`](crate::Hypertile::apply_action).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum HypertileAction {
     FocusNext,
